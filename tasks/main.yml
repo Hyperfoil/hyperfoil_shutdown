@@ -1,0 +1,3 @@
+- name: Kill old Hyperfoil
+  command: 'pkill -f io.hyperfoil.role={{ hyperfoil_role }}'
+  failed_when: false
