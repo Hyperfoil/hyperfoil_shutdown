@@ -6,7 +6,7 @@ Terminates Hyperfoil instances
 Role Variables
 --------------
 
-* `hyperfoil_role` (optional): Role that should be terminated (all by default)
+None.
 
 License
 -------
