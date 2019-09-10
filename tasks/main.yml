@@ -1,3 +1,16 @@
-- name: Kill old Hyperfoil
-  command: 'pkill -f io.hyperfoil.controller'
+- name: Gather facts about controller
+  when: hostvars[groups[hyperfoil_controller_group][0]]['ansible_hostname'] is undefined
+  setup: {}
+  delegate_to: groups[hyperfoil_controller_group][0]
+  delegate_facts: true
+- name: Set hyperfoil_controller_host
+  set_fact:
+    hyperfoil_controller_host: "{{ hostvars[groups[hyperfoil_controller_group][0]]['ansible_hostname'] }}"
+- name: Request shutdown
+  uri:
+    url: "http://{{ hyperfoil_controller_host }}:{{ hyperfoil_controller_port }}/shutdown{% if (hyperfoil_shutdown_force | bool ) %}?force{% endif %}"
+  register: shutdown_status
+  until: shutdown_status.status == 200 or shutdown_status.status == -1
+  delay: 5
+  retries: 100000
   failed_when: false
