@@ -6,6 +6,7 @@
 - name: Set hyperfoil_controller_host
   set_fact:
     hyperfoil_controller_host: "{{ hostvars[groups[hyperfoil_controller_group][0]]['ansible_hostname'] }}"
+  when: hyperfoil_controller_host is undefined
 - name: Request shutdown
   uri:
     url: "http://{{ hyperfoil_controller_host }}:{{ hyperfoil_controller_port }}/shutdown{% if (hyperfoil_shutdown_force | bool ) %}?force{% endif %}"
